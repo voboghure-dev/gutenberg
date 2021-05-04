@@ -11,9 +11,10 @@ import {
 	useBlockProps,
 	store as blockEditorStore,
 	getColorClassName,
+	InspectorControls,
 } from '@wordpress/block-editor';
 import ServerSideRender from '@wordpress/server-side-render';
-import { ToolbarButton } from '@wordpress/components';
+import { PanelBody, ToggleControl, ToolbarButton } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { useEffect, useState } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
@@ -69,7 +70,8 @@ export default function PageListEdit( {
 		context.customOverlayBackgroundColor,
 	] );
 
-	const { textColor, backgroundColor, style } = context || {};
+	const { textColor, backgroundColor, showSubmenuIcon, style } =
+		context || {};
 
 	const [ allowConvertToLinks, setAllowConvertToLinks ] = useState( false );
 
@@ -135,8 +137,23 @@ export default function PageListEdit( {
 		showSubmenuIcon: !! context.showSubmenuIcon,
 	};
 
+	const { childrenOnly } = attributes;
+
 	return (
 		<>
+			<InspectorControls>
+				<PanelBody>
+					<ToggleControl
+						label={ __( 'Show only children' ) }
+						checked={ childrenOnly }
+						onChange={ () => {
+							setAttributes( {
+								childrenOnly: ! childrenOnly,
+							} );
+						} }
+					/>
+				</PanelBody>
+			</InspectorControls>
 			{ allowConvertToLinks && (
 				<BlockControls group="other">
 					<ToolbarButton title={ __( 'Edit' ) } onClick={ openModal }>
