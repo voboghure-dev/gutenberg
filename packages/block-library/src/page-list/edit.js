@@ -145,7 +145,7 @@ export default function PageListEdit( {
 				<PanelBody>
 					<ToggleControl
 						label={ __( 'Show only children' ) }
-						checked={ childrenOnly }
+						checked={ !! childrenOnly }
 						onChange={ () => {
 							setAttributes( {
 								childrenOnly: ! childrenOnly,
