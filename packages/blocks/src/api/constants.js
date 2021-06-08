@@ -112,6 +112,10 @@ export const __EXPERIMENTAL_STYLE_PROPERTY = {
 		value: [ 'typography', 'letterSpacing' ],
 		support: [ '__experimentalLetterSpacing' ],
 	},
+	width: {
+		value: [ 'dimensions', 'width' ],
+		support: [ '__experimentalDimensions', 'width' ],
+	},
 	'--wp--style--block-gap': {
 		value: [ 'spacing', 'blockGap' ],
 	},
