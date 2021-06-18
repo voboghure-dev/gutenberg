@@ -1,8 +1,8 @@
 /**
  * WordPress dependencies
  */
-import { HorizontalRule, useConvertUnitToMobile } from '@wordpress/components';
 import { withColors, useBlockProps } from '@wordpress/block-editor';
+import { HorizontalRule, useConvertUnitToMobile } from '@wordpress/components';
 
 /**
  * Internal dependencies

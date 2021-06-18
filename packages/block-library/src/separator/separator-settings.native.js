@@ -1,24 +1,31 @@
 /**
  * WordPress dependencies
  */
-import { __ } from '@wordpress/i18n';
 import { InspectorControls, PanelColorSettings } from '@wordpress/block-editor';
-import { PanelBody, UnitControl } from '@wordpress/components';
+import {
+	PanelBody,
+	UnitControl,
+	__experimentalUseCustomUnits as useCustomUnits,
+} from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
  */
-import { CSS_UNITS, MARGIN_CONSTRAINTS, parseUnit } from './shared';
+import { MARGIN_CONSTRAINTS, parseUnit } from './shared';
 
 const SeparatorSettings = ( {
 	color,
 	setColor,
-	attributes,
+	attributes: { style },
 	setAttributes,
 } ) => {
-	const { style } = attributes;
-	const { top, bottom } = style?.spacing?.margin || {};
+	const units = useCustomUnits( {
+		availableUnits: [ 'px', 'em', 'rem' ],
+		defaultValues: { px: '0', em: '0', rem: '0' },
+	} );
 
+	const { top, bottom } = style?.spacing?.margin || {};
 	const topUnit = parseUnit( top );
 	const bottomUnit = parseUnit( bottom );
 	const topValue = top
@@ -74,7 +81,7 @@ const SeparatorSettings = ( {
 					max={ MARGIN_CONSTRAINTS[ topUnit ].max }
 					value={ topValue || MARGIN_CONSTRAINTS[ topUnit ].min }
 					unit={ topUnit }
-					units={ CSS_UNITS }
+					units={ units }
 					onChange={ createHandleMarginChange( 'top', topUnit ) }
 					onUnitChange={ onUnitChange }
 					decimalNum={ 1 }
@@ -89,7 +96,7 @@ const SeparatorSettings = ( {
 						bottomValue || MARGIN_CONSTRAINTS[ bottomUnit ].min
 					}
 					unit={ bottomUnit }
-					units={ CSS_UNITS }
+					units={ units }
 					onChange={ createHandleMarginChange(
 						'bottom',
 						bottomUnit

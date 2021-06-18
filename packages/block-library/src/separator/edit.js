@@ -6,11 +6,7 @@ import classnames from 'classnames';
 /**
  * WordPress dependencies
  */
-import {
-	HorizontalRule,
-	__experimentalBoxControl as BoxControl,
-} from '@wordpress/components';
-import { View } from '@wordpress/primitives';
+import { HorizontalRule } from '@wordpress/components';
 import { withColors, useBlockProps } from '@wordpress/block-editor';
 
 /**
@@ -18,45 +14,22 @@ import { withColors, useBlockProps } from '@wordpress/block-editor';
  */
 import SeparatorSettings from './separator-settings';
 
-const { __Visualizer: BoxControlVisualizer } = BoxControl;
-
-function SeparatorEdit( props ) {
-	const {
-		color,
-		attributes: { style },
-	} = props;
-
-	const { top, bottom } = style?.spacing?.margin || {};
-	const blockProps = useBlockProps();
-
+function SeparatorEdit( { color, setColor, className } ) {
 	return (
 		<>
-			<View
-				{ ...blockProps }
-				className={ blockProps.className?.replace(
-					'wp-block-separator',
-					'wp-block-separator-wrapper'
-				) }
-				style={ {} }
-			>
-				<BoxControlVisualizer
-					values={ style?.spacing?.margin }
-					showValues={ style?.visualizers?.margin }
-				/>
-				<HorizontalRule
-					className={ classnames( blockProps.className, {
+			<HorizontalRule
+				{ ...useBlockProps( {
+					className: classnames( className, {
 						'has-background': color.color,
 						[ color.class ]: color.class,
-					} ) }
-					style={ {
+					} ),
+					style: {
 						backgroundColor: color.color,
 						color: color.color,
-						marginTop: top,
-						marginBottom: bottom,
-					} }
-				/>
-			</View>
-			<SeparatorSettings { ...props } />
+					},
+				} ) }
+			/>
+			<SeparatorSettings color={ color } setColor={ setColor } />
 		</>
 	);
 }
