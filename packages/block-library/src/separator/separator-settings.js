@@ -7,7 +7,7 @@ import { InspectorControls, PanelColorSettings } from '@wordpress/block-editor';
 const SeparatorSettings = ( { color, setColor } ) => (
 	<InspectorControls>
 		<PanelColorSettings
-			title={ __( 'Color settings' ) }
+			title={ __( 'Color' ) }
 			colorSettings={ [
 				{
 					value: color.color,
@@ -15,7 +15,7 @@ const SeparatorSettings = ( { color, setColor } ) => (
 					label: __( 'Color' ),
 				},
 			] }
-		/>
+		></PanelColorSettings>
 	</InspectorControls>
 );
 
