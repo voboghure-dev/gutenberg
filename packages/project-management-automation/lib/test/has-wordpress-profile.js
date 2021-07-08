@@ -8,7 +8,7 @@ import nock from 'nock';
  */
 import hasWordPressProfile from '../has-wordpress-profile';
 
-describe( 'hasWordPressProfile', () => {
+describe.skip( 'hasWordPressProfile', () => {
 	it( 'resolves as false for missing profile', async () => {
 		nock( 'https://profiles.wordpress.org' )
 			.intercept( '/wp-json/wporg-github/v1/lookup/ghost', 'HEAD' )
