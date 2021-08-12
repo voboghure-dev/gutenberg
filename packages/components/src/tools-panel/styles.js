@@ -34,6 +34,10 @@ export const ToolsPanel = css`
 			display: none;
 		}
 	}
+
+	> div {
+		grid-column: span 2;
+	}
 `;
 
 export const ToolsPanelHeader = css`
@@ -44,6 +48,10 @@ export const ToolsPanelHeader = css`
 	grid-column: span 2;
 	justify-content: space-between;
 	line-height: normal;
+
+	> span {
+		display: inline-flex;
+	}
 
 	.components-tools-panel & {
 		margin: 0;
@@ -79,12 +87,18 @@ export const ToolsPanelItem = css`
 		max-width: 100%;
 	}
 
-	& > .components-base-control:last-child {
+	& > .components-base-control:last-child,
+	.block-editor-color-gradient-control {
 		margin-bottom: 0;
 
 		.components-base-control__field {
 			margin-bottom: 0;
 		}
+	}
+
+	.block-editor-color-gradient-control__color-indicator span {
+		display: inline-flex;
+		align-items: center;
 	}
 `;
 

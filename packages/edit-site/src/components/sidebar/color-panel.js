@@ -1,8 +1,12 @@
 /**
  * WordPress dependencies
  */
-import { __experimentalPanelColorGradientSettings as PanelColorGradientSettings } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
+import { __experimentalColorGradientControl as ColorGradientControl } from '@wordpress/block-editor';
+import {
+	__experimentalToolsPanel as ToolsPanel,
+	__experimentalToolsPanelItem as ToolsPanelItem,
+} from '@wordpress/components';
 
 /**
  * Internal dependencies
@@ -59,11 +63,15 @@ export default function ColorPanel( {
 	if ( hasTextColor ) {
 		const color = getStyle( name, 'color' );
 		const userColor = getStyle( name, 'color', 'user' );
+
 		settings.push( {
 			colorValue: color,
 			onColorChange: ( value ) => setStyle( name, 'color', value ),
 			label: __( 'Text color' ),
 			clearable: color === userColor,
+			isShownByDefault: true,
+			hasValue: () => !! userColor,
+			onDeselect: () => setStyle( name, 'color', undefined ),
 		} );
 	}
 
@@ -75,6 +83,9 @@ export default function ColorPanel( {
 			colorValue: backgroundColor,
 			onColorChange: ( value ) =>
 				setStyle( name, 'backgroundColor', value ),
+			isShownByDefault: true,
+			hasValue: () => !! userBackgroundColor,
+			onDeselect: () => setStyle( name, 'backgroundColor', undefined ),
 		};
 		if ( backgroundColor ) {
 			backgroundSettings.clearable =
@@ -90,6 +101,9 @@ export default function ColorPanel( {
 			gradientValue: gradient,
 			onGradientChange: ( value ) =>
 				setStyle( name, 'background', value ),
+			isShownByDefault: true,
+			hasValue: () => !! userGradient,
+			onDeselect: () => setStyle( name, 'background', undefined ),
 		};
 		if ( gradient ) {
 			gradientSettings.clearable = gradient === userGradient;
@@ -112,24 +126,53 @@ export default function ColorPanel( {
 			onColorChange: ( value ) => setStyle( name, 'linkColor', value ),
 			label: __( 'Link color' ),
 			clearable: color === userColor,
+			isShownByDefault: true,
+			hasValue: () => !! userColor,
+			onDeselect: () => setStyle( name, 'linkColor', undefined ),
 		} );
 	}
 
+	const resetAll = () => {
+		setStyle( name, 'color', undefined );
+		setStyle( name, 'backgroundColor', undefined );
+		setStyle( name, 'background', undefined );
+		setStyle( name, 'linkColor', undefined );
+	};
+
 	return (
-		<PanelColorGradientSettings
-			title={ __( 'Color' ) }
-			settings={ settings }
-			colors={ solids }
-			gradients={ gradients }
-			disableCustomColors={ ! areCustomSolidsEnabled }
-			disableCustomGradients={ ! areCustomGradientsEnabled }
+		<ToolsPanel
+			label={ __( 'Color options' ) }
+			header={ __( 'Color' ) }
+			resetAll={ resetAll }
 		>
+			{ settings.map( ( setting, index ) => (
+				<ToolsPanelItem
+					key={ index }
+					hasValue={ setting.hasValue }
+					label={ setting.label }
+					onDeselect={ setting.onDeselect }
+					isShownByDefault={ setting.isShownByDefault }
+				>
+					<ColorGradientControl
+						{ ...{
+							colors: solids,
+							gradients,
+							disableCustomColors: ! areCustomSolidsEnabled,
+							disableCustomGradients: ! areCustomGradientsEnabled,
+							clearable: false,
+							label: setting.label,
+							onColorChange: setting.onColorChange,
+							colorValue: setting.colorValue,
+						} }
+					/>
+				</ToolsPanelItem>
+			) ) }
 			<ColorPalettePanel
 				key={ 'color-palette-panel-' + name }
 				contextName={ name }
 				getSetting={ getSetting }
 				setSetting={ setSetting }
 			/>
-		</PanelColorGradientSettings>
+		</ToolsPanel>
 	);
 }
