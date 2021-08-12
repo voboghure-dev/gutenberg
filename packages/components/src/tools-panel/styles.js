@@ -79,12 +79,10 @@ export const ToolsPanelItem = css`
 		max-width: 100%;
 	}
 
-	& > .components-base-control:last-child {
+	> .components-base-control,
+	> .components-base-control:last-child,
+	.components-base-control__field {
 		margin-bottom: 0;
-
-		.components-base-control__field {
-			margin-bottom: 0;
-		}
 	}
 `;
 
