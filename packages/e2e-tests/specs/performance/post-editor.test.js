@@ -26,6 +26,7 @@ import {
 	getClickEventDurations,
 	getHoverEventDurations,
 	getSelectionEventDurations,
+	getLoadingDurations,
 } from './utils';
 
 jest.setTimeout( 1000000 );
@@ -35,7 +36,12 @@ describe( 'Post Editor Performance', () => {
 		const traceFile = __dirname + '/trace.json';
 		let traceResults;
 		const results = {
-			load: [],
+			serverResponse: [],
+			firstPaint: [],
+			domContentLoaded: [],
+			loaded: [],
+			firstContentfulPaint: [],
+			firstBlock: [],
 			type: [],
 			focus: [],
 			inserterOpen: [],
@@ -67,10 +73,23 @@ describe( 'Post Editor Performance', () => {
 		// Measuring loading time
 		let i = 5;
 		while ( i-- ) {
-			const startTime = new Date();
 			await page.reload();
 			await page.waitForSelector( '.wp-block' );
-			results.load.push( new Date() - startTime );
+			const {
+				serverResponse,
+				firstPaint,
+				domContentLoaded,
+				loaded,
+				firstContentfulPaint,
+				firstBlock,
+			} = await getLoadingDurations();
+
+			results.serverResponse.push( serverResponse );
+			results.firstPaint.push( firstPaint );
+			results.domContentLoaded.push( domContentLoaded );
+			results.loaded.push( loaded );
+			results.firstContentfulPaint.push( firstContentfulPaint );
+			results.firstBlock.push( firstBlock );
 		}
 
 		// Measure time to open inserter
