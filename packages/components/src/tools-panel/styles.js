@@ -34,6 +34,10 @@ export const ToolsPanel = css`
 			display: none;
 		}
 	}
+
+	> div {
+		grid-column: span 2;
+	}
 `;
 
 export const ToolsPanelHeader = css`
@@ -79,7 +83,8 @@ export const ToolsPanelItem = css`
 		max-width: 100%;
 	}
 
-	& > .components-base-control:last-child {
+	& > .components-base-control:last-child,
+	.components-base-control.block-editor-color-gradient-control {
 		margin-bottom: 0;
 
 		.components-base-control__field {
