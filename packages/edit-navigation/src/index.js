@@ -1,13 +1,14 @@
 /**
  * WordPress dependencies
  */
+import { store as blocksStore } from '@wordpress/blocks';
 import {
 	registerCoreBlocks,
 	__experimentalRegisterExperimentalCoreBlocks,
 } from '@wordpress/block-library';
+import { dispatch, useDispatch } from '@wordpress/data';
 import { render, useMemo } from '@wordpress/element';
 import { __experimentalFetchLinkSuggestions as fetchLinkSuggestions } from '@wordpress/core-data';
-import { useDispatch } from '@wordpress/data';
 
 /**
  * Internal dependencies
@@ -53,8 +54,9 @@ function NavEditor( { settings } ) {
  */
 function setUpEditor( settings ) {
 	addFilters( ! settings.blockNavMenus );
-	registerCoreBlocks();
 
+	dispatch( blocksStore ).__experimentalReapplyBlockTypeFilters();
+	registerCoreBlocks();
 	if ( process.env.GUTENBERG_PHASE === 2 ) {
 		__experimentalRegisterExperimentalCoreBlocks();
 	}
