@@ -34,7 +34,7 @@ function useHasHeight( { name, supports } ) {
 }
 
 function useHasWidth( { name, supports } ) {
-	const settings = useSetting( 'dimensions.customWidth', name );
+	const settings = useSetting( 'dimensions.width', name );
 
 	return settings && supports.includes( 'width' );
 }

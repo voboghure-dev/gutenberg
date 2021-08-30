@@ -75,7 +75,7 @@ export function resetWidth( { attributes = {}, setAttributes } ) {
  * @return {boolean}     Whether width control is disabled.
  */
 export function useIsWidthDisabled( { name: blockName } = {} ) {
-	const isDisabled = ! useSetting( 'dimensions.customWidth' );
+	const isDisabled = ! useSetting( 'dimensions.width' );
 	return ! hasWidthSupport( blockName ) || isDisabled;
 }
 

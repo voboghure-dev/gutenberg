@@ -212,7 +212,7 @@
 		},
 		"dimensions": {
 			"height": false,
-			"customWidth": false
+			"width": false
 		},
 		"spacing": {
 			"customMargin": false,
