@@ -9,8 +9,9 @@ import classnames from 'classnames';
 import { useRefEffect } from '@wordpress/compose';
 import { addQueryArgs } from '@wordpress/url';
 import { useState } from '@wordpress/element';
-import { Placeholder, Spinner, Disabled } from '@wordpress/components';
+import { Spinner, Disabled } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import { Placeholder } from '@wordpress/block-editor';
 
 export default function Preview( { idBase, instance, isVisible } ) {
 	const [ isLoaded, setIsLoaded ] = useState( false );

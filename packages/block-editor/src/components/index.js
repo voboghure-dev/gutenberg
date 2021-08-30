@@ -69,6 +69,7 @@ export { default as __experimentalListView } from './list-view';
 export { ListViewBlockFill as __experimentalListViewBlockFill } from './list-view/block-slot';
 export { default as __experimentalListViewEditor } from './list-view/editor';
 export { default as MediaReplaceFlow } from './media-replace-flow';
+export { default as Placeholder } from './placeholder';
 export { default as MediaPlaceholder } from './media-placeholder';
 export { default as MediaUpload } from './media-upload';
 export { default as MediaUploadCheck } from './media-upload/check';
