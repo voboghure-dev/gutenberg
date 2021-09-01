@@ -36,17 +36,17 @@ function useHasLineHeightControl( { supports, name } ) {
 
 function useHasAppearanceControl( { supports, name } ) {
 	const hasFontStyles =
-		useSetting( 'typography.customFontStyle', name ) &&
+		useSetting( 'typography.fontStyle', name ) &&
 		supports.includes( 'fontStyle' );
 	const hasFontWeights =
-		useSetting( 'typography.customFontWeight', name ) &&
+		useSetting( 'typography.fontWeight', name ) &&
 		supports.includes( 'fontWeight' );
 	return hasFontStyles || hasFontWeights;
 }
 
 function useHasLetterSpacingControl( { supports, name } ) {
 	return (
-		useSetting( 'typography.customLetterSpacing', name ) &&
+		useSetting( 'typography.letterSpacing', name ) &&
 		supports.includes( 'letterSpacing' )
 	);
 }
@@ -63,10 +63,10 @@ export default function TypographyPanel( {
 	);
 	const fontFamilies = useSetting( 'typography.fontFamilies', name );
 	const hasFontStyles =
-		useSetting( 'typography.customFontStyle', name ) &&
+		useSetting( 'typography.fontStyle', name ) &&
 		supports.includes( 'fontStyle' );
 	const hasFontWeights =
-		useSetting( 'typography.customFontWeight', name ) &&
+		useSetting( 'typography.fontWeight', name ) &&
 		supports.includes( 'fontWeight' );
 	const hasLineHeightEnabled = useHasLineHeightControl( { supports, name } );
 	const hasAppearanceControl = useHasAppearanceControl( { supports, name } );
