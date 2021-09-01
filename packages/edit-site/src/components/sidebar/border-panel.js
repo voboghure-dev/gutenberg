@@ -32,34 +32,31 @@ export function useHasBorderPanel( { supports, name } ) {
 		useHasBorderWidthControl( { supports, name } ),
 	];
 
-	return controls.every( Boolean );
+	return controls.some( Boolean );
 }
 
 function useHasBorderColorControl( { supports, name } ) {
 	return (
-		useSetting( 'border.customColor', name ) &&
-		supports.includes( 'borderColor' )
+		useSetting( 'border.color', name ) && supports.includes( 'borderColor' )
 	);
 }
 
 function useHasBorderRadiusControl( { supports, name } ) {
 	return (
-		useSetting( 'border.customRadius', name ) &&
+		useSetting( 'border.radius', name ) &&
 		supports.includes( 'borderRadius' )
 	);
 }
 
 function useHasBorderStyleControl( { supports, name } ) {
 	return (
-		useSetting( 'border.customStyle', name ) &&
-		supports.includes( 'borderStyle' )
+		useSetting( 'border.style', name ) && supports.includes( 'borderStyle' )
 	);
 }
 
 function useHasBorderWidthControl( { supports, name } ) {
 	return (
-		useSetting( 'border.customWidth', name ) &&
-		supports.includes( 'borderWidth' )
+		useSetting( 'border.width', name ) && supports.includes( 'borderWidth' )
 	);
 }
 
