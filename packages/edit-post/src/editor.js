@@ -15,13 +15,12 @@ import {
 	store as editorStore,
 } from '@wordpress/editor';
 import { StrictMode, useMemo } from '@wordpress/element';
-import { KeyboardShortcuts, SlotFillProvider } from '@wordpress/components';
+import { SlotFillProvider } from '@wordpress/components';
 import { store as coreStore } from '@wordpress/core-data';
 
 /**
  * Internal dependencies
  */
-import preventEventDiscovery from './prevent-event-discovery';
 import Layout from './components/layout';
 import EditorInitialization from './components/editor-initialization';
 import EditPostSettings from './components/edit-post-settings';
@@ -180,9 +179,6 @@ function Editor( {
 						<ErrorBoundary onError={ onError }>
 							<EditorInitialization postId={ postId } />
 							<Layout styles={ styles } />
-							<KeyboardShortcuts
-								shortcuts={ preventEventDiscovery }
-							/>
 						</ErrorBoundary>
 						<PostLockedModal />
 					</EditorProvider>
