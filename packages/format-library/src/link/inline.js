@@ -145,6 +145,7 @@ function InlineLinkUI( {
 			position="bottom center"
 		>
 			<LinkControl
+				key={ linkValue?.url }
 				value={ linkValue }
 				onChange={ onChangeLink }
 				onRemove={ removeLink }
