@@ -7,7 +7,7 @@ import classnames from 'classnames';
  * WordPress dependencies
  */
 import { useEntityProp } from '@wordpress/core-data';
-import { useState } from '@wordpress/element';
+import { useState, useRef } from '@wordpress/element';
 import { __experimentalGetSettings, dateI18n } from '@wordpress/date';
 import {
 	AlignmentControl,
@@ -58,6 +58,7 @@ export default function PostDateEdit( {
 		} )
 	);
 	const resolvedFormat = format || siteFormat || settings.formats.date;
+	const toggleButtonRef = useRef();
 	const blockProps = useBlockProps( {
 		className: classnames( {
 			[ `has-text-align-${ textAlign }` ]: textAlign,
@@ -68,7 +69,26 @@ export default function PostDateEdit( {
 		<time dateTime={ dateI18n( 'c', date ) }>
 			{ dateI18n( resolvedFormat, date ) }
 			{ isPickerOpen && (
-				<Popover onClose={ setIsPickerOpen.bind( null, false ) }>
+				<Popover
+					onClose={ () => {
+						const { ownerDocument } = toggleButtonRef.current;
+
+						if (
+							// When clicking the toggle button, focus will
+							// either move to the button or the focusable div
+							// (Safari) so do not handle closing the popover
+							// because the toggle will handle it. Focus should
+							// remain on the toggle button.
+							toggleButtonRef.current.contains(
+								ownerDocument.activeElement
+							)
+						) {
+							return;
+						}
+
+						setIsPickerOpen( false );
+					} }
+				>
 					<DateTimePicker
 						currentDate={ date }
 						onChange={ setDate }
@@ -101,15 +121,15 @@ export default function PostDateEdit( {
 				/>
 
 				{ date && ! isDescendentOfQueryLoop && (
-					<ToolbarButton
-						icon={ edit }
-						title={ __( 'Change Date' ) }
-						onClick={ () =>
-							setIsPickerOpen(
-								( _isPickerOpen ) => ! _isPickerOpen
-							)
-						}
-					/>
+					<div tabIndex={ -1 } ref={ toggleButtonRef }>
+						<ToolbarButton
+							icon={ edit }
+							title={ __( 'Change Date' ) }
+							onClick={ () =>
+								setIsPickerOpen( ( value ) => ! value )
+							}
+						/>
+					</div>
 				) }
 			</BlockControls>
 
