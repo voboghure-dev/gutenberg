@@ -91,6 +91,11 @@ export const ToolsPanelItem = css`
 			margin-bottom: 0;
 		}
 	}
+
+	.block-editor-color-gradient-control__color-indicator > span {
+		display: inline-flex;
+		align-items: center;
+	}
 `;
 
 export const DropdownMenu = css`

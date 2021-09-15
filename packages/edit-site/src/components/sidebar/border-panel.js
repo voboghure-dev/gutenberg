@@ -112,11 +112,7 @@ export default function BorderPanel( {
 	};
 
 	return (
-		<ToolsPanel
-			label={ __( 'Border options' ) }
-			header={ __( 'Border' ) }
-			resetAll={ resetAll }
-		>
+		<ToolsPanel label={ __( 'Border' ) } resetAll={ resetAll }>
 			{ showBorderWidth && (
 				<ToolsPanelItem
 					className="single-column"
