@@ -329,6 +329,30 @@ function gutenberg_global_styles_include_support_for_wp_variables( $allow_css, $
 	return ! ! preg_match( '/^var\(--wp-[a-zA-Z0-9\-]+\)$/', trim( $parts[1] ) );
 }
 
+/**
+ * Function to get access to data coming from the theme's theme.json.
+ *
+ * @param [array] $path Path to the setting to retrieve. If empty (the default), will return all settings.
+ * @param [string] $block Which block to retrieve the settings from. If empty (the default), will return the global settings.
+ *
+ * @return array The settings to retrieve
+ */
+function get_settings_from_theme( $path = array(), $block = '' ) {
+	if ( $block !== '' ) {
+		$path = array_merge( array( 'blocks', $block ), $path );
+	}
+
+	// TODO: unwrap presets that are keyed by origin. Only return the theme presets.
+	// TODO: fallback to data from add_theme_supports?
+
+	$settings = WP_Theme_JSON_Resolver_Gutenberg::get_theme_data()->get_settings();
+	if ( ! empty( $path ) ) {
+		return _wp_array_get( $settings, $path );
+	}
+
+	return $settings;
+}
+
 // The else clause can be removed when plugin support requires WordPress 5.8.0+.
 if ( function_exists( 'get_block_editor_settings' ) ) {
 	add_filter( 'block_editor_settings_all', 'gutenberg_experimental_global_styles_settings', PHP_INT_MAX );
