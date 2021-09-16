@@ -33,6 +33,10 @@ export const ToolsPanel = css`
 		&:empty {
 			display: none;
 		}
+
+		> div {
+			grid-column: span 2;
+		}
 	}
 
 	> div {

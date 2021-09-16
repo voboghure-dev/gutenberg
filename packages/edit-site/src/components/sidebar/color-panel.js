@@ -140,11 +140,7 @@ export default function ColorPanel( {
 	};
 
 	return (
-		<ToolsPanel
-			label={ __( 'Color options' ) }
-			header={ __( 'Color' ) }
-			resetAll={ resetAll }
-		>
+		<ToolsPanel label={ __( 'Color' ) } resetAll={ resetAll }>
 			{ settings.map( ( setting, index ) => (
 				<ToolsPanelItem
 					key={ index }

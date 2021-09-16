@@ -1,12 +1,8 @@
 /**
  * WordPress dependencies
  */
-import { __ } from '@wordpress/i18n';
 import { useState, useEffect } from '@wordpress/element';
-import {
-	__experimentalToolsPanel as ToolsPanel,
-	__experimentalToolsPanelItem as ToolsPanelItem,
-} from '@wordpress/components';
+import { __experimentalToolsPanelItem as ToolsPanelItem } from '@wordpress/components';
 
 /**
  * Internal dependencies
@@ -24,7 +20,6 @@ function getComputedStyle( node ) {
 export default function ColorPanel( {
 	settings,
 	clientId,
-	resetAll,
 	enableContrastChecking = true,
 } ) {
 	const [ detectedBackgroundColor, setDetectedBackgroundColor ] = useState();
@@ -64,41 +59,37 @@ export default function ColorPanel( {
 	} );
 
 	return (
-		<InspectorControls>
-			<ToolsPanel
-				label={ __( 'Color options' ) }
-				header={ __( 'Color' ) }
-				resetAll={ resetAll }
-			>
-				{ settings.map( ( setting, index ) => (
-					<ToolsPanelItem
-						key={ index }
-						hasValue={ setting.hasValue }
-						label={ setting.label }
-						onDeselect={ setting.onDeselect }
-						isShownByDefault={ setting.isShownByDefault }
-					>
-						<ColorGradientControl
-							{ ...{
-								colors,
-								gradients,
-								disableCustomColors,
-								disableCustomGradients,
-								clearable: false,
-								label: setting.label,
-								onColorChange: setting.onColorChange,
-								colorValue: setting.colorValue,
-							} }
-						/>
-					</ToolsPanelItem>
-				) ) }
-				{ enableContrastChecking && (
-					<ContrastChecker
-						backgroundColor={ detectedBackgroundColor }
-						textColor={ detectedColor }
+		<InspectorControls __experimentalGroup="color">
+			{ settings.map( ( setting, index ) => (
+				<ToolsPanelItem
+					key={ index }
+					hasValue={ setting.hasValue }
+					label={ setting.label }
+					onDeselect={ setting.onDeselect }
+					isShownByDefault={ setting.isShownByDefault }
+					resetAllFilter={ setting.resetAllFilter }
+					panelId={ clientId }
+				>
+					<ColorGradientControl
+						{ ...{
+							colors,
+							gradients,
+							disableCustomColors,
+							disableCustomGradients,
+							clearable: false,
+							label: setting.label,
+							onColorChange: setting.onColorChange,
+							colorValue: setting.colorValue,
+						} }
 					/>
-				) }
-			</ToolsPanel>
+				</ToolsPanelItem>
+			) ) }
+			{ enableContrastChecking && (
+				<ContrastChecker
+					backgroundColor={ detectedBackgroundColor }
+					textColor={ detectedColor }
+				/>
+			) }
 		</InspectorControls>
 	);
 }

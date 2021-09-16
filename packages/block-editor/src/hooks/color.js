@@ -96,11 +96,95 @@ const hasColor = ( name ) => ( props ) => {
 		);
 	}
 
+	if ( name === 'link' ) {
+		return !! props.attributes.style?.elements?.link?.color?.text;
+	}
+
 	return (
 		!! props.attributes[ `${ name }Color` ] ||
 		!! props.attributes.style?.color?.[ name ]
 	);
 };
+
+/**
+ * Clears a single color property from a style object.
+ *
+ * @param {Array}  path  Path to color property to clear within styles object.
+ * @param {Object} style Block attributes style object.
+ * @return {Object} Styles with the color property omitted.
+ */
+const clearColorFromStyles = ( path, style ) =>
+	cleanEmptyObject( immutableSet( style, path, undefined ) );
+
+/**
+ * Resets the block attributes for text color.
+ *
+ * @param {Object}   props               Current block props.
+ * @param {Object}   props.attributes    Block attributes.
+ * @param {Function} props.setAttributes Block's setAttributes prop used to apply reset.
+ */
+const resetTextColor = ( { attributes, setAttributes } ) => {
+	setAttributes( {
+		textColor: undefined,
+		style: clearColorFromStyles( [ 'color', 'text' ], attributes.style ),
+	} );
+};
+
+/**
+ * Clears text color related properties from supplied attributes.
+ *
+ * @param {Object} attributes Block attributes.
+ * @return {Object} Update block attributes with text color properties omitted.
+ */
+const resetAllTextFilter = ( attributes ) => ( {
+	textColor: undefined,
+	style: clearColorFromStyles( [ 'color', 'text' ], attributes.style ),
+} );
+
+/**
+ * Resets the block attributes for link color.
+ *
+ * @param {Object}   props               Current block props.
+ * @param {Object}   props.attributes    Block attributes.
+ * @param {Function} props.setAttributes Block's setAttributes prop used to apply reset.
+ */
+const resetLinkColor = ( { attributes, setAttributes } ) => {
+	const path = [ 'elements', 'link', 'color', 'text' ];
+	setAttributes( { style: clearColorFromStyles( path, attributes.style ) } );
+};
+
+/**
+ * Clears link color related properties from supplied attributes.
+ *
+ * @param {Object} attributes Block attributes.
+ * @return {Object} Update block attributes with link color properties omitted.
+ */
+const resetAllLinkFilter = ( attributes ) => ( {
+	style: clearColorFromStyles(
+		[ 'elements', 'link', 'color', 'text' ],
+		attributes.style
+	),
+} );
+
+/**
+ * Clears all background color related properties including gradients from
+ * supplied block attributes.
+ *
+ * @param {Object} attributes Block attributes.
+ * @return {Object} Block attributes with background and gradient omitted.
+ */
+const clearBackgroundAndGradient = ( attributes ) => ( {
+	backgroundColor: undefined,
+	gradient: undefined,
+	style: {
+		...attributes.style,
+		color: {
+			...attributes.style?.color,
+			background: undefined,
+			gradient: undefined,
+		},
+	},
+} );
 
 /**
  * Resets the block attributes for both background color and gradient.
@@ -110,40 +194,7 @@ const hasColor = ( name ) => ( props ) => {
  * @param {Function} props.setAttributes Block's setAttributes prop used to apply reset.
  */
 const resetBackgroundAndGradient = ( { attributes, setAttributes } ) => {
-	const { style } = attributes;
-
-	setAttributes( {
-		backgroundColor: undefined,
-		gradient: undefined,
-		style: cleanEmptyObject( {
-			...style,
-			color: {
-				...style?.color,
-				background: undefined,
-				gradient: undefined,
-			},
-		} ),
-	} );
-};
-
-/**
- * Resets a color by setting is corresponding attributes to undefined.
- *
- * @param {string} name Name of the color to clear.
- */
-const resetColor = ( name ) => ( { attributes, setAttributes } ) => {
-	const { style } = attributes;
-
-	setAttributes( {
-		[ `${ name }Color` ]: undefined,
-		style: cleanEmptyObject( {
-			...style,
-			color: {
-				...style?.color,
-				[ name ]: undefined,
-			},
-		} ),
-	} );
+	setAttributes( clearBackgroundAndGradient( attributes ) );
 };
 
 /**
@@ -284,7 +335,7 @@ function immutableSet( object, path, value ) {
  * @return {WPElement} Color edit element.
  */
 export function ColorEdit( props ) {
-	const { name: blockName, attributes, setAttributes } = props;
+	const { name: blockName, attributes } = props;
 	const solids = useSetting( 'color.palette' ) || EMPTY_ARRAY;
 	const gradients = useSetting( 'color.gradients' ) || EMPTY_ARRAY;
 	const areCustomSolidsEnabled = useSetting( 'color.custom' );
@@ -419,24 +470,6 @@ export function ColorEdit( props ) {
 		'__experimentalDefaultControls',
 	] );
 
-	const resetAll = () => {
-		const newStyle = immutableSet(
-			{
-				...localAttributes.current.style,
-				color: undefined,
-			},
-			[ 'elements', 'link', 'color', 'text' ],
-			undefined
-		);
-
-		setAttributes( {
-			backgroundColor: undefined,
-			gradient: undefined,
-			textColor: undefined,
-			style: newStyle,
-		} );
-	};
-
 	return (
 		<ColorPanel
 			enableContrastChecking={
@@ -444,7 +477,6 @@ export function ColorEdit( props ) {
 				Platform.OS === 'web' && ! gradient && ! style?.color?.gradient
 			}
 			clientId={ props.clientId }
-			resetAll={ resetAll }
 			settings={ [
 				...( hasTextColor
 					? [
@@ -458,7 +490,8 @@ export function ColorEdit( props ) {
 								).color,
 								isShownByDefault: defaultColorControls?.text,
 								hasValue: () => hasColor( 'text' )( props ),
-								onDeselect: () => resetColor( 'text' )( props ),
+								onDeselect: () => resetTextColor( props ),
+								resetAllFilter: resetAllTextFilter,
 							},
 					  ]
 					: [] ),
@@ -484,6 +517,7 @@ export function ColorEdit( props ) {
 									hasColor( 'background' )( props ),
 								onDeselect: () =>
 									resetBackgroundAndGradient( props ),
+								resetAllFilter: clearBackgroundAndGradient,
 							},
 					  ]
 					: [] ),
@@ -500,7 +534,8 @@ export function ColorEdit( props ) {
 									?.text,
 								isShownByDefault: defaultColorControls?.link,
 								hasValue: () => hasColor( 'link' )( props ),
-								onDeselect: () => resetColor( 'link' )( props ),
+								onDeselect: () => resetLinkColor( props ),
+								resetAllFilter: resetAllLinkFilter,
 							},
 					  ]
 					: [] ),
