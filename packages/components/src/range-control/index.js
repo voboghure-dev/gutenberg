@@ -77,6 +77,13 @@ function RangeControl(
 		initial: initialPosition,
 	} );
 	const isResetPendent = useRef( false );
+
+	const isStepAny = step === 'any';
+
+	if ( isStepAny ) {
+		showTooltipProp = withInputField = false;
+	}
+
 	const [ showTooltip, setShowTooltip ] = useState( showTooltipProp );
 	const [ isFocused, setIsFocused ] = useState( false );
 
