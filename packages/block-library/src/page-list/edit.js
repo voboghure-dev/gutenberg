@@ -70,8 +70,7 @@ export default function PageListEdit( {
 		context.customOverlayBackgroundColor,
 	] );
 
-	const { textColor, backgroundColor, showSubmenuIcon, style } =
-		context || {};
+	const { textColor, backgroundColor, style } = context || {};
 
 	const [ allowConvertToLinks, setAllowConvertToLinks ] = useState( false );
 
