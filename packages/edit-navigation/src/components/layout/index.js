@@ -1,10 +1,15 @@
 /**
+ * External dependencies
+ */
+import classnames from 'classnames';
+/**
  * WordPress dependencies
  */
 import {
 	BlockEditorKeyboardShortcuts,
 	BlockEditorProvider,
 	BlockTools,
+	store as blockEditorStore,
 	__unstableUseBlockSelectionClearer as useBlockSelectionClearer,
 } from '@wordpress/block-editor';
 import { useEntityBlockEditor } from '@wordpress/core-data';
@@ -60,6 +65,10 @@ export default function Layout( { blockEditorSettings } ) {
 	const { saveNavigationPost } = useDispatch( editNavigationStore );
 	const savePost = () => saveNavigationPost( navigationPost );
 
+	const hasSelectedBlock = useSelect( ( select ) => {
+		return select( blockEditorStore ).hasSelectedBlock();
+	}, [] );
+
 	const {
 		menus,
 		hasLoadedMenus,
@@ -104,6 +113,15 @@ export default function Layout( { blockEditorSettings } ) {
 		hasMenus &&
 		navigationPost &&
 		isMenuSelected
+	);
+
+	const contentAreaClasses = classnames(
+		'edit-navigation-layout__content-area',
+		{
+			// Adds padding on top in order to keep content on the same place
+			// when the Block Toolbar is not visible.
+			'has-toolbar-offset': ! hasSelectedBlock,
+		}
 	);
 
 	return (
@@ -164,7 +182,7 @@ export default function Layout( { blockEditorSettings } ) {
 											) }
 										{ isBlockEditorReady && (
 											<div
-												className="edit-navigation-layout__content-area"
+												className={ contentAreaClasses }
 												ref={ contentAreaRef }
 											>
 												<BlockTools>

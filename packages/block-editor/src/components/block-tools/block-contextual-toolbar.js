@@ -18,41 +18,48 @@ import BlockToolbar from '../block-toolbar';
 import { store as blockEditorStore } from '../../store';
 
 function BlockContextualToolbar( { focusOnMount, isFixed, ...props } ) {
-	const { blockType, hasParents, showParentSelector } = useSelect(
-		( select ) => {
-			const {
-				getBlockName,
-				getBlockParents,
-				getSelectedBlockClientIds,
-			} = select( blockEditorStore );
-			const { getBlockType } = select( blocksStore );
-			const selectedBlockClientIds = getSelectedBlockClientIds();
-			const selectedBlockClientId = selectedBlockClientIds[ 0 ];
-			const parents = getBlockParents( selectedBlockClientId );
-			const firstParentClientId = parents[ parents.length - 1 ];
-			const parentBlockName = getBlockName( firstParentClientId );
-			const parentBlockType = getBlockType( parentBlockName );
+	const {
+		blockType,
+		hasParents,
+		isBlockSelected,
+		showParentSelector,
+	} = useSelect( ( select ) => {
+		const {
+			getBlockName,
+			getBlockParents,
+			getSelectedBlockClientIds,
+		} = select( blockEditorStore );
+		const { getBlockType } = select( blocksStore );
+		const selectedBlockClientIds = getSelectedBlockClientIds();
+		const selectedBlockClientId = selectedBlockClientIds[ 0 ];
+		const parents = getBlockParents( selectedBlockClientId );
+		const firstParentClientId = parents[ parents.length - 1 ];
+		const parentBlockName = getBlockName( firstParentClientId );
+		const parentBlockType = getBlockType( parentBlockName );
 
-			return {
-				blockType:
-					selectedBlockClientId &&
-					getBlockType( getBlockName( selectedBlockClientId ) ),
-				hasParents: parents.length,
-				showParentSelector:
-					hasBlockSupport(
-						parentBlockType,
-						'__experimentalParentSelector',
-						true
-					) && selectedBlockClientIds.length <= 1,
-			};
-		},
-		[]
-	);
+		return {
+			isBlockSelected: !! selectedBlockClientIds.length,
+			blockType:
+				selectedBlockClientId &&
+				getBlockType( getBlockName( selectedBlockClientId ) ),
+			hasParents: parents.length,
+			showParentSelector:
+				hasBlockSupport(
+					parentBlockType,
+					'__experimentalParentSelector',
+					true
+				) && selectedBlockClientIds.length <= 1,
+		};
+	}, [] );
 
 	if ( blockType ) {
 		if ( ! hasBlockSupport( blockType, '__experimentalToolbar', true ) ) {
 			return null;
 		}
+	}
+
+	if ( ! isBlockSelected ) {
+		return null;
 	}
 
 	// Shifts the toolbar to make room for the parent block selector.

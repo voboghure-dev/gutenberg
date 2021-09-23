@@ -38,6 +38,12 @@
 		// of the editing canvas needs to be full-height for block
 		// deselection to work.
 		flex-grow: 1;
+
+		// Adds padding on top in order to keep content on the same
+		// place when the Block Toolbar is not visible.
+		&.has-toolbar-offset {
+			padding-top: $block-toolbar-height;
+		}
 	}
 
 	.edit-navigation-header {
