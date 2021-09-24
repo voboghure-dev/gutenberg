@@ -136,7 +136,6 @@ function GlobalStylesLevelScreens( {
 				</NavigatorScreen>
 			) }
 
-
 			{ hasColorPanel && (
 				<NavigatorScreen path={ parentMenu + '/colors/palette' }>
 					<ScreenHeader
