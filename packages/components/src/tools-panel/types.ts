@@ -116,6 +116,7 @@ export type ToolsPanelContext = {
 	deregisterPanelItem: ( label: string ) => void;
 	flagItemCustomization: ( label: string ) => void;
 	isResetting: boolean;
+	areAllOptionalControlsHidden?: boolean;
 };
 
 export type ToolsPanelControlsGroupProps = {
