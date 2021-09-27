@@ -2,7 +2,7 @@
  * External dependencies
  */
 // eslint-disable-next-line no-restricted-imports
-import type { ChangeEvent, KeyboardEvent, FocusEvent } from 'react';
+import type { ChangeEvent, KeyboardEvent, FocusEvent, MouseEvent } from 'react';
 import classNames from 'classnames';
 
 /**
@@ -30,18 +30,15 @@ function useUniqueId( idProp?: string ) {
 
 export function useInputControl( {
 	__unstableStateReducer: stateReducer,
-	__unstableInputWidth,
 	className,
 	disabled = false,
 	hideLabelFromVision = false,
 	id: idProp,
 	isPressEnterToChange = false,
-	label,
 	labelPosition = 'top',
-	prefix,
 	size = 'default',
-	suffix,
 	value: valueProp,
+	type,
 	...props
 }: InputControlHookProps ): InputControlProps {
 	const [ isFocused, setIsFocused ] = useState( false );
@@ -128,6 +125,21 @@ export function useInputControl( {
 		}
 	};
 
+	let onMouseDown;
+	if ( type === 'number' ) {
+		// Works around the odd UA (e.g. Firefox) that does not focus inputs of
+		// type=number when their spinner arrows are pressed.
+		onMouseDown = ( event: MouseEvent< HTMLInputElement > ) => {
+			props.onMouseDown?.( event );
+			if (
+				event.currentTarget !==
+				event.currentTarget.ownerDocument.activeElement
+			) {
+				event.currentTarget.focus();
+			}
+		};
+	}
+
 	return {
 		...props,
 		actions,
@@ -136,16 +148,14 @@ export function useInputControl( {
 		hideLabelFromVision,
 		id,
 		isFocused,
-		label,
 		labelPosition,
 		onBlur,
 		onFocus,
 		onChange,
 		onKeyDown,
-		prefix,
+		onMouseDown,
 		size,
-		suffix,
-		__unstableInputWidth,
 		value,
+		type,
 	};
 }
